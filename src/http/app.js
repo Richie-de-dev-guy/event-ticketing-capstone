@@ -4,6 +4,7 @@ import { createServer } from 'node:http';
 import { extname, isAbsolute, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DomainError } from '../domain/errors.js';
+import { createApiRouter } from './apiRoutes.js';
 import { Router } from './router.js';
 
 const DEFAULT_PUBLIC_DIRECTORY = fileURLToPath(new URL('../../public/', import.meta.url));
@@ -102,7 +103,7 @@ async function servePublicFile(response, pathname, publicDirectory, method) {
   }
 }
 
-export function createAppServer({ router = new Router(), publicDirectory = DEFAULT_PUBLIC_DIRECTORY } = {}) {
+export function createAppServer({ router = createApiRouter(), publicDirectory = DEFAULT_PUBLIC_DIRECTORY } = {}) {
   if (!router.match('GET', '/health')) {
     router.get('/health', () => ({ status: 200, body: { status: 'ok' } }));
   }
@@ -114,7 +115,7 @@ export function createAppServer({ router = new Router(), publicDirectory = DEFAU
       const body = await readJsonBody(request);
 
       if (route) {
-        const result = await route.handler({ request, params: route.params, body });
+        const result = await route.handler({ request, params: route.params, body, query: url.searchParams });
         sendJson(response, result?.status ?? 200, result?.body ?? result ?? null);
       } else if (url.pathname === '/api' || url.pathname.startsWith('/api/')) {
         sendError(response, 404, 'NOT_FOUND', 'API route not found');
