@@ -28,6 +28,12 @@ export function createMemoryRepository() {
     async getTier(id) {
       return tiers.get(id);
     },
+    async reserveTickets(id, quantity) {
+      const tier = tiers.get(id);
+      if (!tier || tier.sold + quantity > tier.capacity) return 0;
+      tier.sold += quantity;
+      return 1;
+    },
     async listTiersForEvent(eventId) {
       return [...tiers.values()].filter((tier) => tier.eventId === eventId);
     },

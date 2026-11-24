@@ -44,15 +44,11 @@ export function createBookingService(repository, paymentGateway) {
       if (event.status !== 'published') {
         throw new DomainError('INVALID_STATE', 'Tickets can only be booked for published events');
       }
-      const seatsLeft = tier.capacity - tier.sold;
-      if (seatsLeft < body.quantity) {
-        const message = seatsLeft === 0
-          ? `${tier.name} is sold out`
-          : `Only ${seatsLeft} ticket(s) left in ${tier.name}`;
-        throw new DomainError('SOLD_OUT', message, { seatsLeft });
+      const reserved = await repository.reserveTickets(tier.id, body.quantity);
+      if (reserved !== 1) {
+        throw new DomainError('SOLD_OUT', `${tier.name} does not have enough tickets available`);
       }
 
-      await repository.updateTier(tier.id, { sold: tier.sold + body.quantity });
       let reference;
       do {
         reference = referenceCode();

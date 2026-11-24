@@ -116,6 +116,18 @@ Read in this order:
 4. `src/domain/waitlistQueue.js`: a first-in-first-out queue built from a linked list.
 5. `scripts/demo.js`: how the pieces are used together.
 
+### Build 5: SQLite and overselling
+
+The API server stores data in `data/ticketing.db`. Run `npm test` for the
+concurrent last-seat regression test and `npm run oversell` to compare the
+check-then-write race with the atomic SQLite reservation.
+
+### Build 6: Frontend on mock data
+
+Open the site at `http://localhost:3000/` after `npm start`. The browser
+experience uses in-memory mock events; use the event page to book tickets,
+view the hold countdown, and simulate either a successful or declined payment.
+
 ### If something goes wrong
 
 | You see | Do this |

@@ -1,13 +1,15 @@
 import { afterEach, beforeEach, describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { createAppServer } from '../src/http/app.js';
+import { createApiRouter } from '../src/http/apiRoutes.js';
+import { createMemoryRepository } from '../src/repositories/memory.js';
 
 describe('REST API', () => {
   let server;
   let baseUrl;
 
   beforeEach(async () => {
-    server = createAppServer();
+    server = createAppServer({ router: createApiRouter({ repository: createMemoryRepository() }) });
     await new Promise((resolve, reject) => {
       server.once('error', reject);
       server.listen(0, '127.0.0.1', resolve);

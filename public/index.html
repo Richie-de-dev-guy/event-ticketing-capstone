@@ -3,12 +3,49 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Event Ticketing</title>
+    <meta name="description" content="Find events and book tickets in Nigeria.">
+    <title>Event Ticketing | Discover events</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <script type="module" src="/js/pages/home.js"></script>
   </head>
   <body>
-    <main>
-      <h1>Event Ticketing</h1>
-      <p>The Build 3 server is running.</p>
+    <header class="site-header">
+      <a class="brand" href="/">Event Ticketing</a>
+      <p>Find your next great day out.</p>
+    </header>
+    <main class="page-shell">
+      <section class="intro">
+        <p class="eyebrow">Good times, nearby</p>
+        <h1>Discover events</h1>
+        <p>Explore live music, culture and community events.</p>
+      </section>
+      <form id="filters" class="filter-panel" aria-label="Filter events">
+        <div class="field">
+          <label for="search">Search events</label>
+          <input id="search" name="q" type="search" placeholder="Try jazz or Civic Hall">
+        </div>
+        <div class="field">
+          <label for="city">City</label>
+          <select id="city" name="city">
+            <option value="">All cities</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="max-price">Maximum ticket price (₦)</label>
+          <input id="max-price" name="maxPrice" type="number" min="0" step="1" placeholder="Any price">
+        </div>
+        <div class="field">
+          <label for="sort">Sort by</label>
+          <select id="sort" name="sort">
+            <option value="date">Date</option>
+            <option value="price">Price: lowest first</option>
+            <option value="availability">Most seats available</option>
+          </select>
+        </div>
+      </form>
+      <p id="results-status" class="status-text" aria-live="polite"></p>
+      <section id="events-list" class="event-grid" aria-label="Events"></section>
     </main>
+    <footer class="site-footer">A little more life, together.</footer>
   </body>
 </html>
